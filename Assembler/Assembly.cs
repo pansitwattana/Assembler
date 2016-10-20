@@ -46,7 +46,18 @@ namespace Assembler
 
         private string ConvertTypeO()
         {
-            return "";
+            string ResultO = "";
+            switch (Instruction)
+            {
+                case "halt":
+                    ResultO += "110";
+                    break;
+                case "noop":
+                    ResultO += "111";
+                    break;
+            }
+            ResultO += ExtendZero(DecToBin(Field0), 22);
+            return ResultO;
         }
 
         private string ConvertTypeJ()
@@ -58,7 +69,9 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            ResultJ += ExtendZero(DecToBin(Field0), 16);
+            ResultJ += DecToBin(Field0);
+            ResultJ += DecToBin(Field1);
+            ResultJ += ExtendZero(DecToBin(Field2), 16);
             return ResultJ;
         }
 
@@ -79,7 +92,8 @@ namespace Assembler
 
             }
             ResultI += DecToBin(Field0);
-            ResultI += ExtendZero(DecToBin(Field1), 16);
+            ResultI += DecToBin(Field1);
+            ResultI += ExtendZero(DecToBin(Field2), 16);
             return ResultI;
         }
 
@@ -97,7 +111,7 @@ namespace Assembler
             }
             ResultR += DecToBin(Field0);
             ResultR += DecToBin(Field1);
-            ResultR += ExtendZero(DecToBin(Field2), 13);
+            ResultR += ExtendZero(DecToBin(Field2), 16);
             return ResultR;
         }
 
