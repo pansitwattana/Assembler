@@ -18,9 +18,56 @@ namespace Assembler
 
         public string Label { get; set; }
         public string Instruction { get; set; }
-        public string Field0 { get; set; }
-        public string Field1 { get; set; }
-        public string Field2 { get; set; }
+        private string field0;
+
+        public string Field0
+        {
+            get { return field0; }
+            set
+            {
+                field0 = GetValue(value);
+            }
+        }
+
+        private bool isNumeric(string value)
+        {
+            int f = 0;
+            return int.TryParse(value, out f);
+        }
+
+        private string field1;
+
+        public string Field1
+        {
+            get { return field1; }
+            set
+            {
+                field1 = GetValue(value);
+            }
+        }
+
+        private string GetValue(string value)
+        {
+            int f = 0;
+            if (int.TryParse(value, out f))
+                return value;
+            else
+            {
+                return "000";//.fill not done
+            }
+        }
+
+        private string field2;
+
+        public string Field2
+        {
+            get { return field2; }
+            set
+            {
+                field2 = GetValue(value);
+            }
+        }
+
         public string Type { get; set; }
         public override string ToString()
         {
@@ -40,7 +87,7 @@ namespace Assembler
                 case "O":
                     return ConvertTypeO();
                 default:
-                    return "Null";
+                    return "Not a type";
             }
         }
 
@@ -69,8 +116,8 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            ResultJ += DecToBin(Field0);
-            ResultJ += DecToBin(Field1);
+            ResultJ += ExtendZero(DecToBin(Field0), 3);
+            ResultJ += ExtendZero(DecToBin(Field1), 3);
             ResultJ += ExtendZero(DecToBin(Field2), 16);
             return ResultJ;
         }
@@ -80,7 +127,7 @@ namespace Assembler
             string ResultI = "";
             switch (Instruction)
             {
-                case "lW":
+                case "lw":
                     ResultI += "010";
                     break;
                 case "sw":
@@ -91,15 +138,15 @@ namespace Assembler
                     break;
 
             }
-            ResultI += DecToBin(Field0);
-            ResultI += DecToBin(Field1);
+            ResultI += ExtendZero(DecToBin(Field0), 3);
+            ResultI += ExtendZero(DecToBin(Field1), 3);
             ResultI += ExtendZero(DecToBin(Field2), 16);
             return ResultI;
         }
 
         private string ConvertTypeR()
         {
-            string ResultR = "000";
+            string ResultR = "";
             switch (Instruction)
             {
                 case "add":
@@ -109,8 +156,8 @@ namespace Assembler
                     ResultR += "001";
                     break;
             }
-            ResultR += DecToBin(Field0);
-            ResultR += DecToBin(Field1);
+            ResultR += ExtendZero(DecToBin(Field0), 3);
+            ResultR += ExtendZero(DecToBin(Field1), 3);
             ResultR += ExtendZero(DecToBin(Field2), 16);
             return ResultR;
         }
