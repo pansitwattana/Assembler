@@ -141,5 +141,14 @@ namespace Assembler
                 Console.WriteLine(assembly.ToMachine());
             }
         }
+        private static string padbit(string input, int bitc)
+        {
+            string str;
+            char pad = '0';
+            str = input.PadLeft(bitc, pad);
+
+            return str;
+        }
+
     }
 }
