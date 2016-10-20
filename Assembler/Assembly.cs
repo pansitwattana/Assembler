@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Assembler
 {
@@ -23,7 +24,7 @@ namespace Assembler
         public string Type { get; set; }
         public override string ToString()
         {
-            return Label + "\t" + Instruction + "\t" + Field0 + "\t" + Field1 + "\t" + Field2 + "\t" + Comment;
+            return Label + "\t" + Instruction + "\t" + Field0 + "\t" + Field1 + "\t" + Field2 + "\t";
         }
 
         public string ToMachine()
@@ -57,7 +58,7 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            ResultJ += DecToBin(Field0);
+            ResultJ += ExtendZero(DecToBin(Field0), 16);
             return ResultJ;
         }
 
@@ -78,7 +79,7 @@ namespace Assembler
 
             }
             ResultI += DecToBin(Field0);
-            ResultI += ExtendZero(DecToBin(Field1));
+            ResultI += ExtendZero(DecToBin(Field1), 16);
             return ResultI;
         }
 
@@ -96,7 +97,7 @@ namespace Assembler
             }
             ResultR += DecToBin(Field0);
             ResultR += DecToBin(Field1);
-            ResultR += ExtendZero(DecToBin(Field2));
+            ResultR += ExtendZero(DecToBin(Field2), 13);
             return ResultR;
         }
 
@@ -111,9 +112,12 @@ namespace Assembler
         }
 
         //zeroextend
-        private string ExtendZero(string bin)
+        private string ExtendZero(string bin, int max)
         {
-            return "";
+            string str;
+            char pad = '0';
+            str = bin.PadLeft(max, pad);
+            return str;
         }
     }
 }

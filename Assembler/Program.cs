@@ -46,7 +46,7 @@ namespace Assembler
 
 
             String Instruction_Type = "";
-            string[] Sub_text = In_text.Split(' ');
+            string[] Sub_text = inputText.Split('\t');
             List<string> Instruction_Sub_text = new List<string>(); // Type + lable + Instruction_name +  field0-2 
 
 
@@ -77,6 +77,8 @@ namespace Assembler
             {
                 Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name]);
                 Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 1]);
+                Instruction_Sub_text.Add("");
+                Instruction_Sub_text.Add("");
 
             }
             else  // of R and I type get 3 field
@@ -97,7 +99,7 @@ namespace Assembler
             }
 
 
-            assembies.Add(new Assembly());
+            assembies.Add(new Assembly(Instruction_Sub_text[0],Instruction_Sub_text[2],Instruction_Sub_text[3], Instruction_Sub_text[4], Instruction_Sub_text[5],Instruction_Sub_text[1]));
         }
 
         private static bool Check_Instruction(String text)
@@ -141,14 +143,5 @@ namespace Assembler
                 Console.WriteLine(assembly.ToMachine());
             }
         }
-        private static string padbit(string input, int bitc)
-        {
-            string str;
-            char pad = '0';
-            str = input.PadLeft(bitc, pad);
-
-            return str;
-        }
-
     }
 }
