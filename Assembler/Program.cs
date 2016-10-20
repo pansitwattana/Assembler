@@ -43,12 +43,19 @@ namespace Assembler
         {
 
 
-
-
             String Instruction_Type = "";
-            string[] Sub_text = inputText.Split('\t');
-            List<string> Instruction_Sub_text = new List<string>(); // Type + lable + Instruction_name +  field0-2 
+            char[] in_derim = { ' ', '\t' };
+            string[] Sub_text = inputText.Split(in_derim);
 
+
+            //List<string> Instruction_Sub_text = new List<string>(); // Type + lable + Instruction_name +  field0-2 
+
+            String In_type = "";
+            String Instruc = "";
+            String label = "";
+            String f1 = "";
+            String f2 = "";
+            String f3 = "";
 
 
             int Index_Of_Instruce_Name = 0;
@@ -58,48 +65,40 @@ namespace Assembler
                 Instruction_Type = Check_Instruction_type(Sub_text[0]);
                 Index_Of_Instruce_Name = 0;
 
-                Instruction_Sub_text.Add("");
-                Instruction_Sub_text.Add(Instruction_Type); // get type
+
+                In_type = Instruction_Type; // get type
             }
             else if (Check_Instruction(Sub_text[1]))  // Label + instruct
             {
                 Instruction_Type = Check_Instruction_type(Sub_text[1]);
                 Index_Of_Instruce_Name = 1;
 
-                Instruction_Sub_text.Add(Sub_text[0]);
-                Instruction_Sub_text.Add(Instruction_Type); // get type
+                label = Sub_text[0];
+                In_type = Instruction_Type; // get type
 
             }
 
 
-
-            if (Instruction_Type == "J" || Instruction_Type == "F")  // get only 1 field
+            if (Instruction_Type == "O" )
             {
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 1]);
-                Instruction_Sub_text.Add("");
-                Instruction_Sub_text.Add("");
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+            }
+            else if (Instruction_Type == "J" || Instruction_Type == "F")  // get only 1 field
+            {
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+                f1 = Sub_text[Index_Of_Instruce_Name + 1];
 
             }
             else  // of R and I type get 3 field
             {
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 1]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 2]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 3]);
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+                f1 = Sub_text[Index_Of_Instruce_Name + 1];
+                f2 = Sub_text[Index_Of_Instruce_Name + 2];
+                f3 = Sub_text[Index_Of_Instruce_Name + 3];
             }
 
 
-
-
-
-            foreach (string text in Instruction_Sub_text)
-            {
-                Console.WriteLine(text);
-            }
-
-
-            assembies.Add(new Assembly(Instruction_Sub_text[0],Instruction_Sub_text[2],Instruction_Sub_text[3], Instruction_Sub_text[4], Instruction_Sub_text[5],Instruction_Sub_text[1]));
+            assembies.Add(new Assembly(label,Instruc,f1, f2, f3, In_type));
         }
 
         private static bool Check_Instruction(String text)
