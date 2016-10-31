@@ -9,21 +9,40 @@ namespace Assembler
 {
     class Program
     {
-        static List<Assembly> assembies = new List<Assembly>();
-        static TextReader input = Console.In;
+        public static class Global
+        {
+            public static Dictionary<string, int> fillValues = new Dictionary<string, int>();
+            public static Dictionary<string, int> addressValues = new Dictionary<string, int>();
+        }
+
+        public static List<Assembly> assembies = new List<Assembly>();
+
         static void Main(string[] args)
         {
             Input(args);
             Process();
+
+            Console.WriteLine("Show .fill values");
+            foreach(KeyValuePair<string, int> value in Global.fillValues)
+            {
+                Console.WriteLine(value.Key + " have " + value.Value);
+            }
+
+            Console.WriteLine("Show address label value");
+            foreach(KeyValuePair<string, int> value in Global.addressValues)
+            {
+                Console.WriteLine(value.Key + " is address " + value.Value);
+            }
         }
 
         private static void Input(string[] args)
         {
-            ReadFromFile(args);
+            ReadFromFileAndSplit(args);
         }
 
-        private static void ReadFromFile(string[] args)
+        private static void ReadFromFileAndSplit(string[] args)
         {
+            TextReader input = Console.In;
             if (args.Any())
             {
                 var path = args[0];
@@ -41,22 +60,16 @@ namespace Assembler
 
         private static void SplitText(string inputText)
         {
-
-
             String Instruction_Type = "";
             char[] in_derim = { ' ', '\t' };
             string[] Sub_text = inputText.Split(in_derim);
 
-
-            //List<string> Instruction_Sub_text = new List<string>(); // Type + lable + Instruction_name +  field0-2 
-
             String In_type = "";
             String Instruc = "";
             String label = "";
-            String f1 = "";
-            String f2 = "";
-            String f3 = "";
-
+            String rs = "";
+            String rt = "";
+            String rd = "";
 
             int Index_Of_Instruce_Name = 0;
             // check Type
@@ -74,10 +87,14 @@ namespace Assembler
                 Index_Of_Instruce_Name = 1;
 
                 label = Sub_text[0];
+
+                if (label != "" && label != " " && label != "\t")
+                {
+                    Global.addressValues.Add(label, assembies.Count);
+                }
+
                 In_type = Instruction_Type; // get type
-
             }
-
 
             if (Instruction_Type == "O" )
             {
@@ -86,19 +103,31 @@ namespace Assembler
             else if (Instruction_Type == "J" || Instruction_Type == "F")  // get only 1 field
             {
                 Instruc = Sub_text[Index_Of_Instruce_Name];
-                f1 = Sub_text[Index_Of_Instruce_Name + 1];
+                rs = Sub_text[Index_Of_Instruce_Name + 1];
 
             }
             else  // of R and I type get 3 field
             {
                 Instruc = Sub_text[Index_Of_Instruce_Name];
-                f1 = Sub_text[Index_Of_Instruce_Name + 1];
-                f2 = Sub_text[Index_Of_Instruce_Name + 2];
-                f3 = Sub_text[Index_Of_Instruce_Name + 3];
+                rs = Sub_text[Index_Of_Instruce_Name + 1];
+                rt = Sub_text[Index_Of_Instruce_Name + 2];
+                rd = Sub_text[Index_Of_Instruce_Name + 3];
             }
 
+            if (In_type == "F")
+            {
+                int value = 0;
+                if (int.TryParse(rs, out value))
+                {
+                    Global.fillValues.Add(label, value);
+                }
+                else
+                {
+                    Global.fillValues.Add(label, Global.addressValues[rs]);
+                }
+            }
 
-            assembies.Add(new Assembly(label,Instruc,f1, f2, f3, In_type));
+            assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type));
         }
 
         private static bool Check_Instruction(String text)
