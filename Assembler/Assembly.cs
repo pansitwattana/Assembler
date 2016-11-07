@@ -85,21 +85,21 @@ namespace Assembler
             {
                 case "R":
                     MachineCode = ConvertTypeR();
-                    break;
+                    return MachineCode;
                 case "I":
                     MachineCode = ConvertTypeI();
-                    break;
+                    return MachineCode;
                 case "J":
                     MachineCode = ConvertTypeJ();
-                    break;
+                    return MachineCode;
                 case "O":
                     MachineCode = ConvertTypeO();
-                    break;
+                    return MachineCode;
                 default:
-                    MachineCode = "-";//yang mai dai tum
-                    break;
+                    MachineCode = DecToBinaryWithMaxBit(CheckIfFillValue(Field0), 25);
+                    return CheckIfFillValue(Field0);
             }
-            return MachineCode;
+            
         }
 
         private string ConvertTypeO()
@@ -185,7 +185,8 @@ namespace Assembler
             ResultR += DecToBinaryWithMaxBit(Field0, 3);    
             //regB      
             ResultR += DecToBinaryWithMaxBit(Field1, 3);
-            ResultR += DecToBinaryWithMaxBit("0", 13);         
+            ResultR += DecToBinaryWithMaxBit("0", 13);
+            ResultR += DecToBinaryWithMaxBit(Field2, 3);      
             //test
             //ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
