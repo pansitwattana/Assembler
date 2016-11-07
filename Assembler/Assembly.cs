@@ -104,7 +104,7 @@ namespace Assembler
                     ResultO += "111";
                     break;
             }
-            ResultO += ExtendZero(DecToBin("0"), 22);
+            ResultO += DecToBinaryWithMaxBit("0", 22);
             return ResultO;
         }
 
@@ -117,9 +117,9 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            ResultJ += ExtendZero(DecToBin(Field0), 3);
-            ResultJ += ExtendZero(DecToBin(Field1), 3);
-            ResultJ += ExtendZero(DecToBin(Field2), 16);
+            ResultJ += DecToBinaryWithMaxBit(Field0, 3);
+            ResultJ += DecToBinaryWithMaxBit(Field1, 3);
+            ResultJ += DecToBinaryWithMaxBit(Field2, 16);
             return ResultJ;
         }
 
@@ -139,9 +139,9 @@ namespace Assembler
                     break;
 
             }
-            ResultI += ExtendZero(DecToBin(Field0), 3);
-            ResultI += ExtendZero(DecToBin(Field1), 3);
-            ResultI += ExtendZero(DecToBin(Field2), 16);
+            ResultI += DecToBinaryWithMaxBit(Field0, 3);
+            ResultI += DecToBinaryWithMaxBit(Field1, 3);
+            ResultI += DecToBinaryWithMaxBit(Field2, 16);
             return ResultI;
         }
 
@@ -157,17 +157,19 @@ namespace Assembler
                     ResultR += "001";
                     break;
             }
-            ResultR += ExtendZero(DecToBin(Field0), 3);
-            ResultR += ExtendZero(DecToBin(Field1), 3);
-            ResultR += ExtendZero("0", 13);
-            ResultR += ExtendZero(DecToBin(Field2), 3);
+
+            ResultR += DecToBinaryWithMaxBit(Field0, 3);
+          
+            ResultR += DecToBinaryWithMaxBit(Field1, 3);
+            ResultR += DecToBinaryWithMaxBit("0", 13);
+            ResultR += DecToBinaryWithMaxBit(Field2, 3);
             //test
-            ResultR += " " + DecToBinaryWithMaxBit("-2",10);
+            //ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
         }
 
         //Dec to Bin
-        private string DecToBin(string Binary)
+       /* private string DecToBin(string Binary)
         {
 
             //convert string to integer
@@ -177,16 +179,16 @@ namespace Assembler
             //str = str.Substring(Math.Max(str.Length - 8, 0)).PadLeft(8, '0');
             string bin = Convert.ToString(value, 2);
             return bin;
-        }
+        }*/
 
         //zeroextend
-        private string ExtendZero(string bin, int max)
+        /*private string ExtendZero(string bin, int max)
         {
             string str;
             char pad = '0';
             str = bin.PadLeft(max, pad);
             return str;
-        }
+        }*/
         
         private string DecToBinaryWithMaxBit(string dec, int bit)
         {
