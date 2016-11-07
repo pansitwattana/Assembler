@@ -96,7 +96,7 @@ namespace Assembler
                     MachineCode = ConvertTypeO();
                     break;
                 default:
-                    MachineCode = "-";//yang mai dai tum
+                    MachineCode = "0";//yang mai dai tum
                     break;
             }
             return MachineCode;
