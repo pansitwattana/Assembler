@@ -118,21 +118,21 @@ namespace Assembler
                     break;
             }
 
-            int value = Int32.Parse(Field0);
+            /*int value = Int32.Parse(Field0);
             if (CheckJalr(value))
             {
                 //regA
-                ResultJ += DecToBinaryWithMaxBit(Field0, 3);
                 //regB
-                ResultJ += DecToBinaryWithMaxBit(Field1, 3);
-                ResultJ += DecToBinaryWithMaxBit("0", 16);
+                
             }
             else
             {
                 Console.WriteLine("404 Your address not found");
-            }
-           
+            }*/
 
+            ResultJ += DecToBinaryWithMaxBit(Field0, 3);
+            ResultJ += DecToBinaryWithMaxBit(Field1, 3);
+            ResultJ += DecToBinaryWithMaxBit("0", 16);
             return ResultJ;
         }
 
@@ -171,11 +171,11 @@ namespace Assembler
                     break;
             }
 
-            ResultR += DecToBinaryWithMaxBit(Field0, 3);
-          
+            //regA
+            ResultR += DecToBinaryWithMaxBit(Field0, 3);    
+            //regB      
             ResultR += DecToBinaryWithMaxBit(Field1, 3);
-            ResultR += DecToBinaryWithMaxBit("0", 13);
-            ResultR += DecToBinaryWithMaxBit(Field2, 3);
+            ResultR += DecToBinaryWithMaxBit("0", 13);         
             //test
             //ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
@@ -253,8 +253,8 @@ namespace Assembler
                 return str;
             }
         }
-
-        //check -> can jump? + jump addr.
+        /*
+        //check -> can jump? + jump addr.  from field1
         private bool CheckJalr(int f0)
         {
           
@@ -269,5 +269,28 @@ namespace Assembler
             }
          
         }
+
+        //check Branch from field2
+        private bool CheckBranch(int f2)
+        {
+            int CountLabel = Program.assembies.Count - Global.fillValues.Count;
+            int UpLabel = 0 - Program.assembies.IndexOf(this);
+            int DownLabel = CountLabel - Program.assembies.IndexOf(this) - 1;
+            //check top label of this label
+            if (f2 < 0 && f2 >= UpLabel)
+            {
+                return true;
+            }
+            else if (f2 <= DownLabel && f2 >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+             
+           
+        }*/
     }
 }
