@@ -46,15 +46,11 @@ namespace Assembler
             }
         }
 
+
+
         private string GetValue(string value)
         {
-            int f = 0;
-            if (int.TryParse(value, out f))
-                return value;
-            else
-            {
-                return "000";//.fill not done
-            }
+            return CheckIfFillValue(value);
         }
 
         private string field2;
@@ -158,7 +154,8 @@ namespace Assembler
             }
             ResultR += ExtendZero(DecToBin(Field0), 3);
             ResultR += ExtendZero(DecToBin(Field1), 3);
-            ResultR += ExtendZero(DecToBin(Field2), 16);
+            ResultR += ExtendZero("0", 13);
+            ResultR += ExtendZero(DecToBin(Field2), 3);
             return ResultR;
         }
 
@@ -180,5 +177,31 @@ namespace Assembler
             str = bin.PadLeft(max, pad);
             return str;
         }
+
+        private string CheckIfFillValue(string f)
+        {
+            int str = 0;
+            /* check fill in dictionary
+            if (Program.Global.fillValues.ContainsKey(f) == false)
+             {
+                return "undefine";
+            }
+             else if (Program.Global.fillValues.ContainsKey(f) == true)*/
+            {
+                int str1 = 0;
+                bool isNumeric = int.TryParse(f, out str1);
+                if (isNumeric == false)
+                {
+                    str = Program.Global.fillValues[f];
+                }
+                else if (isNumeric == true)
+                {
+                    str = str1;
+                }
+                /*int n;
+                 bool isNumeric = int.TryParse("123", out n);*/
+
+                return str + "";
+            }
+        }
     }
-}

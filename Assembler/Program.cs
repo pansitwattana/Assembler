@@ -7,21 +7,29 @@ using System.Threading.Tasks;
 
 namespace Assembler
 {
+
+    public partial class Global
+    {
+        public static Dictionary<string, int> fillValues;
+        public static Dictionary<string, int> addressValues = new Dictionary<string, int>();
+
+        public static void Add(string key, int value)
+        {
+
+        }
+    }
+
     class Program
     {
-        public static class Global
-        {
-            public static Dictionary<string, int> fillValues = new Dictionary<string, int>();
-            public static Dictionary<string, int> addressValues = new Dictionary<string, int>();
-        }
-
         public static List<Assembly> assembies = new List<Assembly>();
 
         static void Main(string[] args)
         {
+            Global.fillValues = new Dictionary<string, int>();
             Input(args);
             Process();
 
+            Console.WriteLine(Global.fillValues["five"]);
             Console.WriteLine("Show .fill values");
             foreach(KeyValuePair<string, int> value in Global.fillValues)
             {
@@ -90,7 +98,10 @@ namespace Assembler
 
                 if (label != "" && label != " " && label != "\t")
                 {
-                    Global.addressValues.Add(label, assembies.Count);
+                    if(!Global.addressValues.ContainsKey(label))
+                        Global.addressValues.Add(label, assembies.Count);
+                    else
+                        Console.WriteLine("duplicated label");
                 }
 
                 In_type = Instruction_Type; // get type
@@ -168,8 +179,29 @@ namespace Assembler
         {
             foreach (Assembly assembly in assembies)
             {
-                Console.WriteLine(assembly.ToMachine());
+                if (!CheckError(assembly))
+                {
+                    Console.WriteLine(assembly.ToMachine());
+                }
+                {
+                    Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
+                }
             }
+        }
+
+        private static bool CheckError(Assembly assembly)
+        {
+            int value = 0;
+            if(int.TryParse(assembly.Field2, out value))
+            {
+                return false;
+            }
+            else
+            {
+                
+                return Global.addressValues.ContainsKey(assembly.Field2);
+            }
+            
         }
     }
 }
