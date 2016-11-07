@@ -113,13 +113,17 @@ namespace Assembler
             string ResultJ = "";
             switch (Instruction)
             {
-                case "jair":
+                case "jalr":
                     ResultJ += "101";
                     break;
             }
+            //regA
             ResultJ += ExtendZero(DecToBin(Field0), 3);
+
+            //regB
             ResultJ += ExtendZero(DecToBin(Field1), 3);
-            ResultJ += ExtendZero(DecToBin(Field2), 16);
+            //0
+            ResultJ += ExtendZero(DecToBin("0"), 16);
             return ResultJ;
         }
 
@@ -214,6 +218,22 @@ namespace Assembler
 
                 return str;
             }
+        }
+
+        //check -> can jump? + jump addr.
+        private void CheckJalr(string f0)
+        {
+          
+            int value = Int32.Parse(f0);
+            int CountLabel = Program.assembies.Count - Global.fillValues.Count;
+            if (value > 0 && value <= CountLabel)
+            {
+
+            }else
+            {
+                
+            }
+         
         }
     }
 }
