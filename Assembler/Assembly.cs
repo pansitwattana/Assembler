@@ -161,15 +161,20 @@ namespace Assembler
             ResultR += ExtendZero(DecToBin(Field1), 3);
             ResultR += ExtendZero("0", 13);
             ResultR += ExtendZero(DecToBin(Field2), 3);
+            //test
+            ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
         }
 
         //Dec to Bin
         private string DecToBin(string Binary)
         {
+
             //convert string to integer
             //int m = Int32.Parse("abc");
             int value = Int32.Parse(Binary);
+            //string str = Convert.ToString(value, 2);
+            //str = str.Substring(Math.Max(str.Length - 8, 0)).PadLeft(8, '0');
             string bin = Convert.ToString(value, 2);
             return bin;
         }
@@ -181,6 +186,24 @@ namespace Assembler
             char pad = '0';
             str = bin.PadLeft(max, pad);
             return str;
+        }
+        
+        private string DecToBinaryWithMaxBit(string dec, int bit)
+        {
+            
+            int value = Int32.Parse(dec);
+            if (value >= 0)
+            {
+                string result = Convert.ToString(value, 2).PadLeft(bit, '0');
+                return result;
+            }
+            else
+            {
+                string result = Convert.ToString(value, 2);
+                result = result.Substring(Math.Max(result.Length - bit, 0)).PadLeft(bit, '0');
+                return result;
+            }
+            
         }
 
         private string CheckIfFillValue(string f)
