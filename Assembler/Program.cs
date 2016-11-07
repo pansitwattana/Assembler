@@ -56,9 +56,11 @@ namespace Assembler
 
         private static void SaveToTxt(List<string> text, string path)
         {
-            foreach (string t in text)
-            {
-
+            using (StreamWriter writer = new StreamWriter("output.txt")) {
+                foreach (string t in text)
+                {
+                    writer.WriteLine(t);
+                }
             }
         }
 
