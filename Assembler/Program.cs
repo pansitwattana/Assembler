@@ -31,13 +31,13 @@ namespace Assembler
 
             Console.WriteLine(Global.fillValues["five"]);
             Console.WriteLine("Show .fill values");
-            foreach(KeyValuePair<string, int> value in Global.fillValues)
+            foreach (KeyValuePair<string, int> value in Global.fillValues)
             {
                 Console.WriteLine(value.Key + " have " + value.Value);
             }
 
             Console.WriteLine("Show address label value");
-            foreach(KeyValuePair<string, int> value in Global.addressValues)
+            foreach (KeyValuePair<string, int> value in Global.addressValues)
             {
                 Console.WriteLine(value.Key + " is address " + value.Value);
             }
@@ -138,7 +138,7 @@ namespace Assembler
                 }
             }
 
-            assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type));
+            assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
         }
 
         private static bool Check_Instruction(String text)
@@ -183,6 +183,7 @@ namespace Assembler
                 {
                     Console.WriteLine(assembly.ToMachine());
                 }
+                else
                 {
                     Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
                 }
@@ -192,14 +193,13 @@ namespace Assembler
         private static bool CheckError(Assembly assembly)
         {
             int value = 0;
-            if(int.TryParse(assembly.Field2, out value))
+            if(int.TryParse(assembly.Field2, out value) || assembly.Field2 == "")
             {
                 return false;
             }
             else
             {
-                
-                return Global.addressValues.ContainsKey(assembly.Field2);
+                return !Global.addressValues.ContainsKey(assembly.Field2);
             }
             
         }

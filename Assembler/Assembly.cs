@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Assembler
 {
     public class Assembly
     {
-
-        public Assembly(string label, string inst, string f0, string f1, string f2, string type)
+        Dictionary<string, int> fillValues;
+        Dictionary<string, int> addressValues;
+        public Assembly(string label, string inst, string f0, string f1, string f2, string type, Dictionary<string, int> fillValues, Dictionary<string, int> addressValues)
         {
             Label = label;
             Instruction = inst;
@@ -14,6 +16,8 @@ namespace Assembler
             Field1 = f1;
             Field2 = f2;
             Type = type;
+            this.fillValues = fillValues;
+            this.addressValues = addressValues;
         }
 
         public string Label { get; set; }
@@ -25,7 +29,7 @@ namespace Assembler
             get { return field0; }
             set
             {
-                field0 = GetValue(value);
+                field0 = (value);
             }
         }
 
@@ -42,7 +46,7 @@ namespace Assembler
             get { return field1; }
             set
             {
-                field1 = GetValue(value);
+                field1 = (value);
             }
         }
 
@@ -50,7 +54,7 @@ namespace Assembler
 
         private string GetValue(string value)
         {
-            return CheckIfFillValue(value);
+            return (value);
         }
 
         private string field2;
@@ -60,7 +64,7 @@ namespace Assembler
             get { return field2; }
             set
             {
-                field2 = GetValue(value);
+                field2 = (value);
             }
         }
 
@@ -72,6 +76,7 @@ namespace Assembler
 
         public string ToMachine()
         {
+            Field2 = CheckIfFillValue(Field2);
             switch (Type)
             {
                 case "R":
@@ -99,7 +104,7 @@ namespace Assembler
                     ResultO += "111";
                     break;
             }
-            ResultO += ExtendZero(DecToBin(Field0), 22);
+            ResultO += ExtendZero(DecToBin("0"), 22);
             return ResultO;
         }
 
@@ -180,7 +185,7 @@ namespace Assembler
 
         private string CheckIfFillValue(string f)
         {
-            int str = 0;
+            string str = "";
             /* check fill in dictionary
             if (Program.Global.fillValues.ContainsKey(f) == false)
              {
@@ -190,18 +195,25 @@ namespace Assembler
             {
                 int str1 = 0;
                 bool isNumeric = int.TryParse(f, out str1);
-                if (isNumeric == false)
+                if (isNumeric == false && f != "")
                 {
-                    str = Program.Global.fillValues[f];
+                    if(fillValues.ContainsKey(f))
+                        str = "" + fillValues[f];
+                    else if(addressValues.ContainsKey(f))
+                        str = "" + addressValues[f];
+                    else
+                        Console.WriteLine("Something wrong in code (CheckIfFillValue)");
+                        
                 }
                 else if (isNumeric == true)
                 {
-                    str = str1;
+                    str = f;
                 }
                 /*int n;
                  bool isNumeric = int.TryParse("123", out n);*/
 
-                return str + "";
+                return str;
             }
         }
     }
+}
