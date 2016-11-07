@@ -20,6 +20,7 @@ namespace Assembler
             this.addressValues = addressValues;
         }
 
+        public string MachineCode { get; set; }
         public string Label { get; set; }
         public string Instruction { get; set; }
         private string field0;
@@ -50,7 +51,10 @@ namespace Assembler
             }
         }
 
-
+        public string GetMachine()
+        {
+            return Convert.ToInt32(MachineCode, 2).ToString();
+        }
 
         private string GetValue(string value)
         {
@@ -80,16 +84,22 @@ namespace Assembler
             switch (Type)
             {
                 case "R":
-                    return ConvertTypeR();
+                    MachineCode = ConvertTypeR();
+                    break;
                 case "I":
-                    return ConvertTypeI();
+                    MachineCode = ConvertTypeI();
+                    break;
                 case "J":
-                    return ConvertTypeJ();
+                    MachineCode = ConvertTypeJ();
+                    break;
                 case "O":
-                    return ConvertTypeO();
+                    MachineCode = ConvertTypeO();
+                    break;
                 default:
-                    return "Not a type";
+                    MachineCode = "-";//yang mai dai tum
+                    break;
             }
+            return MachineCode;
         }
 
         private string ConvertTypeO()
