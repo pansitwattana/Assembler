@@ -104,7 +104,7 @@ namespace Assembler
                     ResultO += "111";
                     break;
             }
-            ResultO += ExtendZero(DecToBin("0"), 22);
+            ResultO += DecToBinaryWithMaxBit("0", 22);
             return ResultO;
         }
 
@@ -117,13 +117,9 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            //regA
-            ResultJ += ExtendZero(DecToBin(Field0), 3);
-
-            //regB
-            ResultJ += ExtendZero(DecToBin(Field1), 3);
-            //0
-            ResultJ += ExtendZero(DecToBin("0"), 16);
+            ResultJ += DecToBinaryWithMaxBit(Field0, 3);
+            ResultJ += DecToBinaryWithMaxBit(Field1, 3);
+            ResultJ += DecToBinaryWithMaxBit(Field2, 16);
             return ResultJ;
         }
 
@@ -143,9 +139,9 @@ namespace Assembler
                     break;
 
             }
-            ResultI += ExtendZero(DecToBin(Field0), 3);
-            ResultI += ExtendZero(DecToBin(Field1), 3);
-            ResultI += ExtendZero(DecToBin(Field2), 16);
+            ResultI += DecToBinaryWithMaxBit(Field0, 3);
+            ResultI += DecToBinaryWithMaxBit(Field1, 3);
+            ResultI += DecToBinaryWithMaxBit(Field2, 16);
             return ResultI;
         }
 
@@ -161,30 +157,55 @@ namespace Assembler
                     ResultR += "001";
                     break;
             }
-            ResultR += ExtendZero(DecToBin(Field0), 3);
-            ResultR += ExtendZero(DecToBin(Field1), 3);
-            ResultR += ExtendZero("0", 13);
-            ResultR += ExtendZero(DecToBin(Field2), 3);
+
+            ResultR += DecToBinaryWithMaxBit(Field0, 3);
+          
+            ResultR += DecToBinaryWithMaxBit(Field1, 3);
+            ResultR += DecToBinaryWithMaxBit("0", 13);
+            ResultR += DecToBinaryWithMaxBit(Field2, 3);
+            //test
+            //ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
         }
 
         //Dec to Bin
-        private string DecToBin(string Binary)
+       /* private string DecToBin(string Binary)
         {
+
             //convert string to integer
             //int m = Int32.Parse("abc");
             int value = Int32.Parse(Binary);
+            //string str = Convert.ToString(value, 2);
+            //str = str.Substring(Math.Max(str.Length - 8, 0)).PadLeft(8, '0');
             string bin = Convert.ToString(value, 2);
             return bin;
-        }
+        }*/
 
         //zeroextend
-        private string ExtendZero(string bin, int max)
+        /*private string ExtendZero(string bin, int max)
         {
             string str;
             char pad = '0';
             str = bin.PadLeft(max, pad);
             return str;
+        }*/
+        
+        private string DecToBinaryWithMaxBit(string dec, int bit)
+        {
+            
+            int value = Int32.Parse(dec);
+            if (value >= 0)
+            {
+                string result = Convert.ToString(value, 2).PadLeft(bit, '0');
+                return result;
+            }
+            else
+            {
+                string result = Convert.ToString(value, 2);
+                result = result.Substring(Math.Max(result.Length - bit, 0)).PadLeft(bit, '0');
+                return result;
+            }
+            
         }
 
         private string CheckIfFillValue(string f)
