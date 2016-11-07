@@ -117,9 +117,22 @@ namespace Assembler
                     ResultJ += "101";
                     break;
             }
-            ResultJ += DecToBinaryWithMaxBit(Field0, 3);
-            ResultJ += DecToBinaryWithMaxBit(Field1, 3);
-            ResultJ += DecToBinaryWithMaxBit(Field2, 16);
+
+            int value = Int32.Parse(Field0);
+            if (CheckJalr(value))
+            {
+                //regA
+                ResultJ += DecToBinaryWithMaxBit(Field0, 3);
+                //regB
+                ResultJ += DecToBinaryWithMaxBit(Field1, 3);
+                ResultJ += DecToBinaryWithMaxBit("0", 16);
+            }
+            else
+            {
+                Console.WriteLine("404 Your address not found");
+            }
+           
+
             return ResultJ;
         }
 
@@ -242,17 +255,17 @@ namespace Assembler
         }
 
         //check -> can jump? + jump addr.
-        private void CheckJalr(string f0)
+        private bool CheckJalr(int f0)
         {
           
-            int value = Int32.Parse(f0);
+            //int value = Int32.Parse(f0);
             int CountLabel = Program.assembies.Count - Global.fillValues.Count;
-            if (value > 0 && value <= CountLabel)
+            if (f0 > 0 && f0 <= CountLabel)
             {
-
+                return true;
             }else
-            {
-                
+            {               
+                return false;
             }
          
         }
