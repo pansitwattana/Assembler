@@ -218,7 +218,11 @@ namespace Assembler
         
         private string DecToBinaryWithMaxBit(string dec, int bit)
         {
-            
+            if(dec == "")
+            {
+                return "";
+            }
+
             int value = Int32.Parse(dec);
             if (value >= 0)
             {
