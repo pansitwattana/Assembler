@@ -78,26 +78,25 @@ namespace Assembler
             return Label + "\t" + Instruction + "\t" + Field0 + "\t" + Field1 + "\t" + Field2 + "\t";
         }
 
-        public string ToMachine()
+        public void ToMachine()
         {
-            Field2 = CheckIfFillValue(Field2);
             switch (Type)
             {
                 case "R":
                     MachineCode = ConvertTypeR();
-                    return MachineCode;
+                    break;
                 case "I":
                     MachineCode = ConvertTypeI();
-                    return MachineCode;
+                    break;
                 case "J":
                     MachineCode = ConvertTypeJ();
-                    return MachineCode;
+                    break;
                 case "O":
                     MachineCode = ConvertTypeO();
-                    return MachineCode;
+                    break;
                 default:
-                    MachineCode = DecToBinaryWithMaxBit(CheckIfFillValue(Field0), 25);
-                    return CheckIfFillValue(Field0);
+                    MachineCode = DecToBinaryWithMaxBit(CheckFillValue(Field0), 25);
+                    break;
             }
             
         }
@@ -153,12 +152,15 @@ namespace Assembler
             {
                 case "lw":
                     ResultI += "010";
+                    Field2 = CheckFillValue(Field2);
                     break;
                 case "sw":
                     ResultI += "011";
+                    Field2 = CheckFillValue(Field2);
                     break;
                 case "beq":
                     ResultI += "100";
+                    Field2 = CheckBranch(Field2);
                     break;
 
             }
@@ -232,34 +234,48 @@ namespace Assembler
             
         }
 
-        private string CheckIfFillValue(string f)
+        private string CheckBranch(string field2)
+        {
+            int str1 = 0;
+            bool isNumberic = int.TryParse(field2, out str1);   
+            if (isNumberic == false && field2 != "")
+            {
+                int currentAddr = Program.assembies.IndexOf(this);
+                int branchAddr = 0;
+                if (addressValues.ContainsKey(field2))
+                {
+                    branchAddr = addressValues[field2];
+                }
+                int branchResult = branchAddr - currentAddr - 1;
+                return "" + branchResult;
+            }
+            else
+            {
+                return field2;
+            }
+        }
+
+        private string CheckFillValue(string f)
         {
             string str = "";
-            /* check fill in dictionary
-            if (Program.Global.fillValues.ContainsKey(f) == false)
-             {
-                return "undefine";
-            }
-             else if (Program.Global.fillValues.ContainsKey(f) == true)*/
             {
                 int str1 = 0;
                 bool isNumeric = int.TryParse(f, out str1);
                 if (isNumeric == false && f != "")
                 {
-                    if(fillValues.ContainsKey(f))
-                        str = "" + fillValues[f];
-                    else if(addressValues.ContainsKey(f))
+                    if (fillValues.ContainsKey(f))
                         str = "" + addressValues[f];
-                    else
-                        Console.WriteLine("Something wrong in code (CheckIfFillValue)");
+                    //    str = "" + fillValues[f];
+                    //else if(addressValues.ContainsKey(f))
+                    //    str = "" + addressValues[f];
+                    //else
+                        //Console.WriteLine("Something wrong in code (CheckIfFillValue)");
                         
                 }
                 else if (isNumeric == true)
                 {
                     str = f;
                 }
-                /*int n;
-                 bool isNumeric = int.TryParse("123", out n);*/
 
                 return str;
             }

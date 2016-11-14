@@ -159,7 +159,8 @@ namespace Assembler
                 }
             }
 
-            assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
+            if(Instruc != ".fill")
+                assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
         }
 
         private static bool Check_Instruction(String text)
@@ -202,12 +203,17 @@ namespace Assembler
             {
                 if (!CheckError(assembly))
                 {
-                    Console.WriteLine(assembly.ToMachine());
+                    assembly.ToMachine();
+                    Console.WriteLine(assembly.GetMachine());
                 }
                 else
                 {
                     Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
                 }
+            }
+            foreach (int mem in Global.fillValues.Values)
+            {
+                Console.WriteLine(mem);
             }
         }
 
