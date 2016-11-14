@@ -215,5 +215,15 @@ namespace Assembler
                 return str;
             }
         }
+
+        public bool CheckOS64()
+        {
+            if (Environment.Is64BitOperatingSystem)
+            { return true;  }
+            else
+            { return false; }
+
+        }
+
     }
 }
