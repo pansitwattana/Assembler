@@ -230,5 +230,16 @@ namespace Assembler
             }
             
         }
+
+        public static bool CheckOS64()
+        {
+            if (Environment.Is64BitOperatingSystem)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
     }
 }
