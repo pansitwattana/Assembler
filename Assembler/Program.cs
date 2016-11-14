@@ -29,19 +29,6 @@ namespace Assembler
             Input(args);
             Process();
             Output(args[0]);
-
-            //Console.WriteLine(Global.fillValues["five"]);
-            //Console.WriteLine("Show .fill values");
-            //foreach (KeyValuePair<string, int> value in Global.fillValues)
-            //{
-            //    Console.WriteLine(value.Key + " have " + value.Value);
-            //}
-
-            //Console.WriteLine("Show address label value");
-            //foreach (KeyValuePair<string, int> value in Global.addressValues)
-            //{
-            //    Console.WriteLine(value.Key + " is address " + value.Value);
-            //}
         }
 
         private static void Output(string path)
@@ -209,6 +196,7 @@ namespace Assembler
                 else
                 {
                     Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
+                    Environment.Exit(1);
                 }
             }
             foreach (int mem in Global.fillValues.Values)
