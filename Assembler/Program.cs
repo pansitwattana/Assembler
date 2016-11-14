@@ -28,18 +28,39 @@ namespace Assembler
             Global.fillValues = new Dictionary<string, int>();
             Input(args);
             Process();
+            Output(args[0]);
 
-            Console.WriteLine(Global.fillValues["five"]);
-            Console.WriteLine("Show .fill values");
-            foreach (KeyValuePair<string, int> value in Global.fillValues)
+            //Console.WriteLine(Global.fillValues["five"]);
+            //Console.WriteLine("Show .fill values");
+            //foreach (KeyValuePair<string, int> value in Global.fillValues)
+            //{
+            //    Console.WriteLine(value.Key + " have " + value.Value);
+            //}
+
+            //Console.WriteLine("Show address label value");
+            //foreach (KeyValuePair<string, int> value in Global.addressValues)
+            //{
+            //    Console.WriteLine(value.Key + " is address " + value.Value);
+            //}
+        }
+
+        private static void Output(string path)
+        {
+            List<string> text = new List<string>();
+            foreach (Assembly assembly in assembies)
             {
-                Console.WriteLine(value.Key + " have " + value.Value);
+                text.Add(assembly.GetMachine());
             }
+            SaveToTxt(text, path);
+        }
 
-            Console.WriteLine("Show address label value");
-            foreach (KeyValuePair<string, int> value in Global.addressValues)
-            {
-                Console.WriteLine(value.Key + " is address " + value.Value);
+        private static void SaveToTxt(List<string> text, string path)
+        {
+            using (StreamWriter writer = new StreamWriter("output.txt")) {
+                foreach (string t in text)
+                {
+                    writer.WriteLine(t);
+                }
             }
         }
 
