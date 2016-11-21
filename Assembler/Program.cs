@@ -106,10 +106,13 @@ namespace Assembler
 
                 if (label != "" && label != " " && label != "\t")
                 {
-                    if(!Global.addressValues.ContainsKey(label))
+                    if (!Global.addressValues.ContainsKey(label))
                         Global.addressValues.Add(label, assembies.Count);
                     else
+                     {
                         Console.WriteLine("duplicated label");
+                        Environment.Exit(1);
+                      }
                 }
 
                 In_type = Instruction_Type; // get type
@@ -163,6 +166,7 @@ namespace Assembler
             else if (text == "halt") { check_instruction = true; }
             else if (text == "noop") { check_instruction = true; }
             else if (text == ".fill") { check_instruction = true; }
+
 
             return check_instruction;
         }

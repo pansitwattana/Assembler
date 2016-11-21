@@ -53,7 +53,23 @@ namespace Assembler
 
         public string GetMachine()
         {
-            return Convert.ToInt32(MachineCode, 2).ToString();
+           
+            try
+            {
+                return Convert.ToInt32(MachineCode, 2).ToString();
+            }
+          catch
+            {
+                if(MachineCode == "")
+                {
+                    Console.WriteLine("Unknow OP Code ....");
+                    Environment.Exit(1);
+                   
+                }
+
+            }
+
+            return "";
         }
 
         private string GetValue(string value)
@@ -274,11 +290,19 @@ namespace Assembler
                     //    str = "" + addressValues[f];
                     //else
                         //Console.WriteLine("Something wrong in code (CheckIfFillValue)");
-                        
+                       
+                        //check Offset more16bit
+
                 }
                 else if (isNumeric == true)
                 {
                     str = f;
+                }
+
+                if (Int32.Parse(str) >= Math.Pow(2, 16))
+                {  
+                    Console.WriteLine("Error Offset is more than Limit 16bit");
+                    Environment.Exit(1);
                 }
 
                 return str;
