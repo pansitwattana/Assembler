@@ -23,6 +23,8 @@ namespace Assembler
     {
         public static List<Assembly> assembies = new List<Assembly>();
 
+        public static int count = 0;
+
         static void Main(string[] args)
         {
             Global.fillValues = new Dictionary<string, int>();
@@ -107,7 +109,10 @@ namespace Assembler
                 if (label != "" && label != " " && label != "\t")
                 {
                     if (!Global.addressValues.ContainsKey(label))
-                        Global.addressValues.Add(label, assembies.Count);
+                    {
+                        Global.addressValues.Add(label, count);
+                    }
+                        
                     else
                      {
                         Console.WriteLine("duplicated label");
@@ -127,6 +132,10 @@ namespace Assembler
                 Instruc = Sub_text[Index_Of_Instruce_Name];
                 rs = Sub_text[Index_Of_Instruce_Name + 1];
 
+                if(Instruc == "jalr")
+                {
+                    rt = Sub_text[Index_Of_Instruce_Name + 2];
+                }
             }
             else  // of R and I type get 3 field
             {
@@ -151,6 +160,7 @@ namespace Assembler
 
             if(Instruc != ".fill")
                 assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
+            count++;
         }
 
         private static bool Check_Instruction(String text)
