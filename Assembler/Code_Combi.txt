@@ -1,0 +1,49 @@
+ lw 0 4 regn 
+ add 0 4 1 
+ lw 0 4 regr 
+ add 0 4 2 
+ lw 0 4 endAdr   
+combi lw 0 6 stacksize    
+ add 6 7 7            
+ lw 0 6 neg1
+ add 0 7 7        
+ sw 7 1 stack        
+ add 6 7 7
+ sw 7 2 stack        
+ add 6 7 7
+ sw 7 4 stack        
+ beq 1 2 4            
+elseif beq	0 2 4            
+ lw 0 6 neg1	    
+ add 6 1 1            
+ lw 0 6 combiAdr     
+ jalr 6 4              
+ lw 0 6 neg1         
+ add 6 1 1            
+ add 6 2 2            
+ lw 0 6 combiAdr     
+ jalr 6 4                
+true lw 0 6 pos1         
+ add 0 6 3            
+ lw 0 6 pos1
+ lw 7 4 stack        
+ add 6 7 7
+ lw 7 2 stack        
+ add 6 7 7
+ sw 7 1 stack        
+ add 0 7 7 
+ lw 0 6 stasize       
+ add 6 7 7            
+ jalr 4 6              
+end	noop
+ halt
+endAdr .fill end
+pos1 .fill 1
+neg1 .fill -1
+trueAdr .fill true
+combiAdr .fill combi
+stacksize .fill 3     
+stasize .fill -3 
+regn .fill 7     
+regr .fill 3     
+stack .fill 0  

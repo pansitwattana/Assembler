@@ -50,6 +50,10 @@ namespace Assembler
                 {
                     writer.WriteLine(t);
                 }
+                foreach (int fill in Global.fillValues.Values)
+                {
+                    writer.WriteLine(fill + "");
+                }
             }
         }
 

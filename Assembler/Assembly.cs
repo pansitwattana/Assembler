@@ -299,7 +299,7 @@ namespace Assembler
                     str = f;
                 }
 
-                if (Int32.Parse(str) >= Math.Pow(2, 16))
+                if (str != "" && Int32.Parse(str) >= Math.Pow(2, 16))
                 {  
                     Console.WriteLine("Error Offset is more than Limit 16bit");
                     Environment.Exit(1);
