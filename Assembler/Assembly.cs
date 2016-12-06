@@ -143,18 +143,6 @@ namespace Assembler
                     break;
             }
 
-            /*int value = Int32.Parse(Field0);
-            if (CheckJalr(value))
-            {
-                //regA
-                //regB
-                
-            }
-            else
-            {
-                Console.WriteLine("404 Your address not found");
-            }*/
-
             ResultJ += DecToBinaryWithMaxBit(Field0, 3);
             ResultJ += DecToBinaryWithMaxBit(Field1, 3);
             ResultJ += DecToBinaryWithMaxBit("0", 16);
@@ -205,8 +193,6 @@ namespace Assembler
             ResultR += DecToBinaryWithMaxBit(Field1, 3);
             ResultR += DecToBinaryWithMaxBit("0", 13);
             ResultR += DecToBinaryWithMaxBit(Field2, 3);      
-            //test
-            //ResultR += " " + DecToBinaryWithMaxBit("-2",10);
             return ResultR;
         }
 
@@ -285,14 +271,6 @@ namespace Assembler
                 {
                     if (fillValues.ContainsKey(f))
                         str = "" + addressValues[f];
-                    //    str = "" + fillValues[f];
-                    //else if(addressValues.ContainsKey(f))
-                    //    str = "" + addressValues[f];
-                    //else
-                        //Console.WriteLine("Something wrong in code (CheckIfFillValue)");
-                       
-                        //check Offset more16bit
-
                 }
                 else if (isNumeric == true)
                 {

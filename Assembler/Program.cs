@@ -209,17 +209,12 @@ namespace Assembler
                 if (!CheckError(assembly))
                 {
                     assembly.ToMachine();
-                    Console.WriteLine(assembly.GetMachine());
                 }
                 else
                 {
                     Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
                     Environment.Exit(1);
                 }
-            }
-            foreach (int mem in Global.fillValues.Values)
-            {
-                Console.WriteLine(mem);
             }
         }
 
@@ -234,7 +229,6 @@ namespace Assembler
             {
                 return !Global.addressValues.ContainsKey(assembly.Field2);
             }
-            
         }
 
         public static bool CheckOS64()
