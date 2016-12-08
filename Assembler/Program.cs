@@ -154,6 +154,11 @@ namespace Assembler
                 int value = 0;
                 if (int.TryParse(rs, out value))
                 {
+                    if (CheckInt32(value))
+                    {
+                        Console.WriteLine("Offset Overflow");
+                        Environment.Exit(1);
+                    }
                     Global.fillValues.Add(label, value);
                 }
                 else
