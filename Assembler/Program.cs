@@ -146,7 +146,6 @@ namespace Assembler
             string str;
             char pad = '0';
             str = input.PadLeft(bitc, pad);
-
             return str;
         }
 
