@@ -7,23 +7,64 @@ using System.Threading.Tasks;
 
 namespace Assembler
 {
+
+    public partial class Global
+    {
+        public static Dictionary<string, int> fillValues;
+        public static Dictionary<string, int> addressValues = new Dictionary<string, int>();
+
+        public static void Add(string key, int value)
+        {
+
+        }
+    }
+
     class Program
     {
-        static List<Assembly> assembies = new List<Assembly>();
-        static TextReader input = Console.In;
+        public static List<Assembly> assembies = new List<Assembly>();
+
+        public static int count = 0;
+
         static void Main(string[] args)
         {
+            Global.fillValues = new Dictionary<string, int>();
             Input(args);
             Process();
+            Output(args[0]);
+        }
+
+        private static void Output(string path)
+        {
+            List<string> text = new List<string>();
+            foreach (Assembly assembly in assembies)
+            {
+                text.Add(assembly.GetMachine());
+            }
+            SaveToTxt(text, path);
+        }
+
+        private static void SaveToTxt(List<string> text, string path)
+        {
+            using (StreamWriter writer = new StreamWriter("output.txt")) {
+                foreach (string t in text)
+                {
+                    writer.WriteLine(t);
+                }
+                foreach (int fill in Global.fillValues.Values)
+                {
+                    writer.WriteLine(fill + "");
+                }
+            }
         }
 
         private static void Input(string[] args)
         {
-            ReadFromFile(args);
+            ReadFromFileAndSplit(args);
         }
 
-        private static void ReadFromFile(string[] args)
+        private static void ReadFromFileAndSplit(string[] args)
         {
+            TextReader input = Console.In;
             if (args.Any())
             {
                 var path = args[0];
@@ -41,15 +82,16 @@ namespace Assembler
 
         private static void SplitText(string inputText)
         {
-
-
-
-
             String Instruction_Type = "";
-            string[] Sub_text = In_text.Split(' ');
-            List<string> Instruction_Sub_text = new List<string>(); // Type + lable + Instruction_name +  field0-2 
+            char[] in_derim = { ' ', '\t' };
+            string[] Sub_text = inputText.Split(in_derim);
 
-
+            String In_type = "";
+            String Instruc = "";
+            String label = "";
+            String rs = "";
+            String rt = "";
+            String rd = "";
 
             int Index_Of_Instruce_Name = 0;
             // check Type
@@ -58,46 +100,98 @@ namespace Assembler
                 Instruction_Type = Check_Instruction_type(Sub_text[0]);
                 Index_Of_Instruce_Name = 0;
 
-                Instruction_Sub_text.Add("");
-                Instruction_Sub_text.Add(Instruction_Type); // get type
+
+                In_type = Instruction_Type; // get type
             }
             else if (Check_Instruction(Sub_text[1]))  // Label + instruct
             {
                 Instruction_Type = Check_Instruction_type(Sub_text[1]);
                 Index_Of_Instruce_Name = 1;
 
-                Instruction_Sub_text.Add(Sub_text[0]);
-                Instruction_Sub_text.Add(Instruction_Type); // get type
+                label = Sub_text[0];
 
+                if (label != "" && label != " " && label != "\t")
+                {
+                    if (!Global.addressValues.ContainsKey(label))
+                    {
+                        Global.addressValues.Add(label, count);
+                    }
+                        
+                    else
+                     {
+                        Console.WriteLine("duplicated label");
+                        Environment.Exit(1);
+                      }
+                }
+
+                In_type = Instruction_Type; // get type
             }
+            else
+                {
+                Console.WriteLine("Opcode is recognize");
+                Environment.Exit(1);
+            }
+        
 
-
-
-            if (Instruction_Type == "J" || Instruction_Type == "F")  // get only 1 field
+            if (Instruction_Type == "O" )
             {
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 1]);
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+            }
+            else if (Instruction_Type == "J" || Instruction_Type == "F")  // get only 1 field
+            {
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+                rs = Sub_text[Index_Of_Instruce_Name + 1];
 
+                if(Instruc == "jalr")
+                {
+                    rt = Sub_text[Index_Of_Instruce_Name + 2];
+                }
             }
             else  // of R and I type get 3 field
             {
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 1]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 2]);
-                Instruction_Sub_text.Add(Sub_text[Index_Of_Instruce_Name + 3]);
+                Instruc = Sub_text[Index_Of_Instruce_Name];
+                rs = Sub_text[Index_Of_Instruce_Name + 1];
+                rt = Sub_text[Index_Of_Instruce_Name + 2];
+                rd = Sub_text[Index_Of_Instruce_Name + 3];
             }
 
-
-
-
-
-            foreach (string text in Instruction_Sub_text)
+            if (In_type == "F")
             {
-                Console.WriteLine(text);
+                int value = 0;
+                if (int.TryParse(rs, out value))
+                {
+                    if (CheckInt32(value))
+                    {
+                        Console.WriteLine("Offset Overflow");
+                        Environment.Exit(1);
+                    }
+                    Global.fillValues.Add(label, value);
+                }
+                else
+                {
+                    Global.fillValues.Add(label, Global.addressValues[rs]);
+                }
             }
 
 
-            assembies.Add(new Assembly());
+            //Check Label
+            if(label != "")
+            {
+                double numbuffer=0;
+                if(label.Length > 6)
+                { Console.WriteLine("Error Label More 6 Word");
+                    Environment.Exit(1);
+                }
+                else if (double.TryParse(label[0]+"",out numbuffer))
+                {
+                    Console.WriteLine("Error Label Start with Number");
+                    Environment.Exit(1);
+                }
+            }
+
+            if (Instruc != ".fill")
+                assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
+            count++;
         }
 
         private static bool Check_Instruction(String text)
@@ -113,6 +207,7 @@ namespace Assembler
             else if (text == "halt") { check_instruction = true; }
             else if (text == "noop") { check_instruction = true; }
             else if (text == ".fill") { check_instruction = true; }
+
 
             return check_instruction;
         }
@@ -138,15 +233,52 @@ namespace Assembler
         {
             foreach (Assembly assembly in assembies)
             {
-                Console.WriteLine(assembly.ToMachine());
+                if (!CheckError(assembly))
+                {
+                    assembly.ToMachine();
+                }
+                else
+                {
+                    Console.WriteLine("Undefined label (" + assembly.Field2 + ")");
+                    Environment.Exit(1);
+                }
             }
         }
-        private static string padbit(string input, int bitc)
+
+        private static bool CheckError(Assembly assembly)
         {
-            string str;
-            char pad = '0';
-            str = input.PadLeft(bitc, pad);
-            return str;
+            int value = 0;
+            if(int.TryParse(assembly.Field2, out value) || assembly.Field2 == "")
+            {
+                return false;
+            }
+            else
+            {
+                return !Global.addressValues.ContainsKey(assembly.Field2);
+            }
+        }
+
+        public static bool CheckOS64()
+        {
+            if (Environment.Is64BitOperatingSystem)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
+
+        public static bool CheckInt32(int input)
+        {
+            if (input > 32767 || input < -32768)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
