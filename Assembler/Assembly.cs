@@ -18,6 +18,8 @@ namespace Assembler
             Type = type;
             this.fillValues = fillValues;
             this.addressValues = addressValues;
+
+            
         }
 
         public string MachineCode { get; set; }

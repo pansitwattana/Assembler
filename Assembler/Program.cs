@@ -167,7 +167,23 @@ namespace Assembler
                 }
             }
 
-            if(Instruc != ".fill")
+
+            //Check Label
+            if(label != "")
+            {
+                double numbuffer=0;
+                if(label.Length > 6)
+                { Console.WriteLine("Error Label More 6 Word");
+                    Environment.Exit(1);
+                }
+                else if (double.TryParse(label[0]+"",out numbuffer))
+                {
+                    Console.WriteLine("Error Label Start with Number");
+                    Environment.Exit(1);
+                }
+            }
+
+            if (Instruc != ".fill")
                 assembies.Add(new Assembly(label,Instruc,rs, rt, rd, In_type, Global.fillValues, Global.addressValues));
             count++;
         }
