@@ -126,6 +126,12 @@ namespace Assembler
 
                 In_type = Instruction_Type; // get type
             }
+            else
+                {
+                Console.WriteLine("Opcode is recognize");
+                Environment.Exit(1);
+            }
+        
 
             if (Instruction_Type == "O" )
             {
