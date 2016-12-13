@@ -13,7 +13,7 @@
 	lw 0 3 arg2
 end	halt
 one	.fill 1
-arg1	.fill 5 
-arg2	.fill 3
+arg1	.fill 3 
+arg2	.fill 5
 neg	.fill -1
 tmp	.fill -32768
