@@ -1,4 +1,4 @@
-	lw	0	6	isNeg
+	lw	0	6	tNeg
 	lw	0	2	mplier
 	nand	6	2	4
 	lw	0	6	neg
@@ -41,8 +41,8 @@ end	beq	3	0	finish
 	add	6	1	1	
 finish	halt
 isNeg	.fill	1
-testNeg	.fill	32768
-tmp	.fill	16
+tNeg	.fill	32768
+tmp	.fill	15
 neg	.fill	-1
 test	.fill	16384	
 mcand	.fill	32760	
