@@ -45,5 +45,5 @@ tNeg	.fill	-32768
 tmp	.fill	16
 neg	.fill	-1
 test	.fill	16384	
-mcand	.fill	32760	
+mcand	.fill	-32760	
 mplier	.fill	10383
