@@ -242,6 +242,7 @@ namespace Assembler
             
         }
 
+
         private string CheckBranch(string field2)
         {
             int str1 = 0;
