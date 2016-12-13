@@ -7,13 +7,14 @@
 	add 2 6 2 
 	add 1 2 1
 	lw 0 6 tmp
-	nand 1 6 1
-	nand 1 4 1
-	beq 1 0 end
-	lw 0 3 arg2
-end	halt
+	add 1 6 1
+	add 1 4 1
+	beq 1 0 max2
+	halt
+max2	lw 0 3 arg2
+	halt
 one	.fill 1
-arg1	.fill 3 
-arg2	.fill 5
+arg1	.fill 5 
+arg2	.fill 9
 neg	.fill -1
-tmp	.fill -32768
+tmp .fill -32768
