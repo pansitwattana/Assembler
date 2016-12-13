@@ -1,0 +1,13 @@
+lw	0	1	one
+lw	0	2	two
+lw	0	3	endAdd
+add	2	1	2
+beq	1	2	equ
+add	1	1	1
+jalr	3	4	
+equal	add	2	2	2
+end	halt
+one	.fill	5
+two	.fill	4
+stAddr	.fill	equal
+endAdd	.fill	end

@@ -1,0 +1,9 @@
+lw	0	1	one
+lw	0	2	two
+beq	1	2	equal
+add	1	1	1
+equal	add	2	2	2
+halt
+one	.fill	5
+two	.fill	5
+stAddr	.fill	equal
